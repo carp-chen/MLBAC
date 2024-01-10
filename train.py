@@ -14,7 +14,7 @@ from sklearn.model_selection import train_test_split
 from torchvision import transforms, datasets
 from tqdm import tqdm
 
-from model import resnet34
+from model import resnet34, resnet50
 from torch.utils.data import DataLoader, Dataset
 import torchvision
 
@@ -137,7 +137,7 @@ def main():
     print("using {} records for training, {} records for validation.".format(train_num,
                                                                            val_num))
     
-    net = resnet34(num_classes=2)
+    net = resnet50(num_classes=2)
     # load pretrain weights
     # download url: https://download.pytorch.org/models/resnet34-333f7ec4.pth
     # model_weight_path = "./resnet34-pre.pth"
