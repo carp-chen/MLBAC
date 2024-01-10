@@ -158,7 +158,7 @@ def main():
     params = [p for p in net.parameters() if p.requires_grad]
     optimizer = optim.Adam(params, lr=0.0001)
 
-    epochs = 3
+    epochs = 10
     best_acc = 0.0
     save_path = './resNet34.pth'
     train_steps = len(train_loader)
@@ -188,15 +188,16 @@ def main():
         net.eval()
         acc = 0.0  # accumulate accurate number / epoch
         with torch.no_grad():
-            val_bar = tqdm(test_loader, file=sys.stdout)
-            for val_data in val_bar:
-                val_images, val_labels = val_data
-                outputs = net(val_images.to(device))
+            test_bar = tqdm(test_loader, file=sys.stdout)
+            for test_data in test_bar:
+                test_input, test_labels = test_data
+                test_input = test_input.to(torch.float32)
+                outputs = net(test_input.to(device))
                 # loss = loss_function(outputs, test_labels)
                 predict_y = torch.max(outputs, dim=1)[1]
-                acc += torch.eq(predict_y, val_labels.to(device)).sum().item()
+                acc += torch.eq(predict_y, test_labels.to(device)).sum().item()
 
-                val_bar.desc = "valid epoch[{}/{}]".format(epoch + 1,
+                test_bar.desc = "valid epoch[{}/{}]".format(epoch + 1,
                                                            epochs)
 
         val_accurate = acc / val_num
