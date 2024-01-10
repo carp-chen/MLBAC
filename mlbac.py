@@ -28,7 +28,7 @@ def data_processing():
     obj.fit(X_balanced)
     X_dummyEncode = obj.transform(X_balanced)
 
-    selectBest_attribute = SelectKBest(chi2, k=550)
+    selectBest_attribute = SelectKBest(chi2, k=4096)
     # fit and transforms the data
     selectBest_attribute.fit(X_dummyEncode, Y_balanced)
     modifiedData = selectBest_attribute.transform(X_dummyEncode)
@@ -183,7 +183,7 @@ def Random_Forest(data, target):
     """
 
     # creates object for random forest classifier
-    random_forest = RandomForestClassifier(n_jobs=10)
+    random_forest = RandomForestClassifier(n_jobs=100)
 
     # variable initialization
     random_seed = 31  # random seed value
@@ -540,20 +540,20 @@ if __name__ == '__main__':
     # print("Time Required for SVM in sec: " ,(time.time() - start_time))
     # print("------------------------------------------------------------------------------")
 
-    start_time = time.time()
-    XGBoost(modifiedData, Y_balanced)
-    print("Time Required for XGBoost in sec: ", (time.time() - start_time))
-    print("------------------------------------------------------------------------------")
+    # start_time = time.time()
+    # XGBoost(modifiedData, Y_balanced)
+    # print("Time Required for XGBoost in sec: ", (time.time() - start_time))
+    # print("------------------------------------------------------------------------------")
 
-    start_time = time.time()
-    lightGBM(modifiedData, Y_balanced)
-    print("Time Required for lightGBM in sec: ", (time.time() - start_time))
-    print("------------------------------------------------------------------------------")
+    # start_time = time.time()
+    # lightGBM(modifiedData, Y_balanced)
+    # print("Time Required for lightGBM in sec: ", (time.time() - start_time))
+    # print("------------------------------------------------------------------------------")
 
-    start_time = time.time()
-    CatBoost(modifiedData, Y_balanced)
-    print("Time Required for CatBoost in sec: ", (time.time() - start_time))
-    print("------------------------------------------------------------------------------")
+    # start_time = time.time()
+    # CatBoost(modifiedData, Y_balanced)
+    # print("Time Required for CatBoost in sec: ", (time.time() - start_time))
+    # print("------------------------------------------------------------------------------")
 
 
     plotGraph()

@@ -1,6 +1,7 @@
 import os
 import argparse
 
+import numpy as np
 import pandas as pd
 import torch
 import torch.optim as optim
@@ -11,7 +12,7 @@ from sklearn.model_selection import train_test_split
 from torch.utils.tensorboard import SummaryWriter
 
 from dataloader import get_loader
-from model import mobile_vit_xx_small as create_model
+from model import mobile_vit_small as create_model
 from utils import read_split_data, train_one_epoch, evaluate
 
 
@@ -28,7 +29,7 @@ def data_parser():
     obj.fit(X_balanced)
     X_dummyEncode = obj.transform(X_balanced)
 
-    selectBest_attribute = SelectKBest(chi2, k=50176)
+    selectBest_attribute = SelectKBest(chi2, k=4096)
     # fit and transforms the data
     selectBest_attribute.fit(X_dummyEncode, Y_balanced)
     modifiedData = selectBest_attribute.transform(X_dummyEncode)
@@ -36,11 +37,11 @@ def data_parser():
     # split the data into train and test
     x_train, x_test, y_train, y_test = train_test_split(modifiedData, Y_balanced, test_size=0.2, random_state=42)
     # 变成numpy array
-    x_train = x_train.toarray()
-    x_test = x_test.toarray()
+    x_train = x_train.A
+    x_test = x_test.A
     # reshape the array
-    x_train = x_train.reshape((x_train.shape[0], 224, 224))
-    x_test = x_test.reshape((x_test.shape[0], 224, 224))
+    x_train = x_train.reshape((x_train.shape[0], 64, 64))
+    x_test = x_test.reshape((x_test.shape[0], 64, 64))
 
     return x_train, x_test, y_train, y_test
 
