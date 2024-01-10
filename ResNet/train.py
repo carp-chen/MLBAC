@@ -1,6 +1,4 @@
-import os
 import sys
-import json
 
 import numpy as np
 import pandas as pd
@@ -11,16 +9,15 @@ from imblearn.over_sampling import BorderlineSMOTE
 from sklearn import preprocessing
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.model_selection import train_test_split
-from torchvision import transforms, datasets
 from tqdm import tqdm
 
-from model import resnet34, resnet50
+from MLBAC.ResNet.model import resnet50
 from torch.utils.data import DataLoader, Dataset
 import torchvision
 
 class DatasetDLBAC(Dataset):
     def __init__(self, x_data, y_data, transform=None):
-        self.x_data = x_data.astype(np.double)
+        self.x_data = x_data.astype(np.float32)
         self.y_data = y_data.astype(np.int8)
         self.transform = transform
         # print('sample x_data', self.x_data[0])
@@ -59,8 +56,8 @@ def get_loader(batch_size, x_train, x_test, y_train, y_test):
     return train_loader, test_loader
 
 def data_parser():
-    data = pd.read_csv("dataset/train.csv", delimiter=',', usecols=range(1, 9))
-    target = pd.read_csv("dataset/train.csv", delimiter=',', usecols=[0])
+    data = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=range(1, 9))
+    target = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=[0])
 
     # smote technique
     sm = BorderlineSMOTE(random_state=42, kind="borderline-1")
@@ -170,7 +167,7 @@ def main():
         for step, data in enumerate(train_bar):
             input, labels = data
             # print(input.shape)
-            input = input.to(torch.float32)
+            # input = input.to(torch.float32)
             optimizer.zero_grad()
             logits = net(input.to(device))
             loss = loss_function(logits, labels.to(device))
@@ -191,7 +188,7 @@ def main():
             test_bar = tqdm(test_loader, file=sys.stdout)
             for test_data in test_bar:
                 test_input, test_labels = test_data
-                test_input = test_input.to(torch.float32)
+                # test_input = test_input.to(torch.float32)
                 outputs = net(test_input.to(device))
                 # loss = loss_function(outputs, test_labels)
                 predict_y = torch.max(outputs, dim=1)[1]

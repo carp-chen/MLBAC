@@ -18,14 +18,12 @@ import torch.nn as nn
 import torch.optim
 import torch.utils.data
 import torch.backends.cudnn
-import torchvision.utils
 from imblearn.over_sampling import BorderlineSMOTE
-from keras.utils import to_categorical
 from sklearn import preprocessing
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.model_selection import train_test_split
 
-from dataloader import get_loader
+from MLBAC.ResNet.dataloader import get_loader
 
 
 logging.basicConfig(
@@ -199,8 +197,8 @@ def test(epoch, model, criterion, test_loader, run_config):
 
 
 def data_parser():
-    data = pd.read_csv("dataset/train.csv", delimiter=',', usecols=range(1, 9))
-    target = pd.read_csv("dataset/train.csv", delimiter=',', usecols=[0])
+    data = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=range(1, 9))
+    target = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=[0])
 
     # smote technique
     sm = BorderlineSMOTE(random_state=42, kind="borderline-1")
