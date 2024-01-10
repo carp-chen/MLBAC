@@ -28,7 +28,7 @@ def data_parser():
     obj.fit(X_balanced)
     X_dummyEncode = obj.transform(X_balanced)
 
-    selectBest_attribute = SelectKBest(chi2, k=4096)
+    selectBest_attribute = SelectKBest(chi2, k=50176)
     # fit and transforms the data
     selectBest_attribute.fit(X_dummyEncode, Y_balanced)
     modifiedData = selectBest_attribute.transform(X_dummyEncode)
@@ -39,8 +39,8 @@ def data_parser():
     x_train = x_train.toarray()
     x_test = x_test.toarray()
     # reshape the array
-    x_train = x_train.reshape((x_train.shape[0], 64, 64))
-    x_test = x_test.reshape((x_test.shape[0], 64, 64))
+    x_train = x_train.reshape((x_train.shape[0], 224, 224))
+    x_test = x_test.reshape((x_test.shape[0], 224, 224))
 
     return x_train, x_test, y_train, y_test
 
@@ -56,8 +56,8 @@ def main(args):
 
     batch_size = args.batch_size
     train_loader, val_loader = get_loader(batch_size, x_train, x_test, y_train, y_test)
-    nw = min([os.cpu_count(), batch_size if batch_size > 1 else 0, 8])  # number of workers
-    print('Using {} dataloader workers every process'.format(nw))
+    # nw = min([os.cpu_count(), batch_size if batch_size > 1 else 0, 8])  # number of workers
+    # print('Using {} dataloader workers every process'.format(nw))
 
 
     model = create_model(num_classes=args.num_classes).to(device)
