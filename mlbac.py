@@ -9,7 +9,7 @@ from sklearn.naive_bayes import BernoulliNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import LinearSVC
-from imblearn.over_sampling import BorderlineSMOTE
+from imblearn.over_sampling import BorderlineSMOTE, ADASYN
 from xgboost import XGBClassifier
 import lightgbm as lgb
 from catboost import CatBoostClassifier
@@ -21,6 +21,7 @@ def data_processing():
 
     # smote technique
     sm = BorderlineSMOTE(random_state=42, kind="borderline-1")
+    ada = ADASYN(random_state=42)
     X_balanced, Y_balanced = sm.fit_resample(data, target.values.ravel())
 
     # dataset is highly categorical so need to perform one-hot encoding

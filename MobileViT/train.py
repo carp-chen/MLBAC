@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import torch
 import torch.optim as optim
-from imblearn.over_sampling import BorderlineSMOTE
+from imblearn.over_sampling import BorderlineSMOTE, ADASYN
 from sklearn import preprocessing
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.model_selection import train_test_split
@@ -22,6 +22,7 @@ def data_parser():
 
     # smote technique
     sm = BorderlineSMOTE(random_state=42, kind="borderline-1")
+    ada = ADASYN(random_state=42)
     X_balanced, Y_balanced = sm.fit_resample(data, target.values.ravel())
 
     # dataset is highly categorical so need to perform one-hot encoding
@@ -29,7 +30,7 @@ def data_parser():
     obj.fit(X_balanced)
     X_dummyEncode = obj.transform(X_balanced)
 
-    selectBest_attribute = SelectKBest(chi2, k=4096)
+    selectBest_attribute = SelectKBest(chi2, k=16384)
     # fit and transforms the data
     selectBest_attribute.fit(X_dummyEncode, Y_balanced)
     modifiedData = selectBest_attribute.transform(X_dummyEncode)
@@ -40,8 +41,8 @@ def data_parser():
     x_train = x_train.A
     x_test = x_test.A
     # reshape the array
-    x_train = x_train.reshape((x_train.shape[0], 64, 64))
-    x_test = x_test.reshape((x_test.shape[0], 64, 64))
+    x_train = x_train.reshape((x_train.shape[0], 128, 128))
+    x_test = x_test.reshape((x_test.shape[0], 128, 128))
 
     return x_train, x_test, y_train, y_test
 
