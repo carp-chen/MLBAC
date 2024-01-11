@@ -28,7 +28,7 @@ def data_processing():
     obj.fit(X_balanced)
     X_dummyEncode = obj.transform(X_balanced)
 
-    selectBest_attribute = SelectKBest(chi2, k=4096)
+    selectBest_attribute = SelectKBest(chi2, k=700)
     # fit and transforms the data
     selectBest_attribute.fit(X_dummyEncode, Y_balanced)
     modifiedData = selectBest_attribute.transform(X_dummyEncode)
