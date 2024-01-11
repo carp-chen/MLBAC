@@ -162,7 +162,7 @@ class Block(nn.Module):
 
 
 class VisionTransformer(nn.Module):
-    def __init__(self, img_size=224, patch_size=16, in_c=3, num_classes=1000,
+    def __init__(self, img_size=224, patch_size=16, in_c=1, num_classes=1000,
                  embed_dim=768, depth=12, num_heads=12, mlp_ratio=4.0, qkv_bias=True,
                  qk_scale=None, representation_size=None, distilled=False, drop_ratio=0.,
                  attn_drop_ratio=0., drop_path_ratio=0., embed_layer=PatchEmbed, norm_layer=None,
