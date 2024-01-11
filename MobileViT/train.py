@@ -35,7 +35,7 @@ def data_parser():
     modifiedData = selectBest_attribute.transform(X_dummyEncode)
 
     # split the data into train and test
-    x_train, x_test, y_train, y_test = train_test_split(modifiedData, Y_balanced, test_size=0.2)
+    x_train, x_test, y_train, y_test = train_test_split(modifiedData, Y_balanced, test_size=0.2, random_state=100)
     # 变成numpy array
     x_train = x_train.A
     x_test = x_test.A
