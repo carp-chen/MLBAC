@@ -165,7 +165,7 @@ if __name__ == '__main__':
     #                     help='initial weights path')
     # # 是否冻结权重
     # parser.add_argument('--freeze-layers', type=bool, default=True)
-    # parser.add_argument('--device', default='cuda:0', help='device id (i.e. 0 or 0,1 or cpu)')
+    parser.add_argument('--device', default='cuda:0', help='device id (i.e. 0 or 0,1 or cpu)')
 
     opt = parser.parse_args()
 
