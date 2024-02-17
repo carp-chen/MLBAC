@@ -2,14 +2,16 @@ import numpy as np
 import pandas as pd
 import time
 import matplotlib.pyplot as plt
+from imblearn.under_sampling import TomekLinks
+from imblearn.combine import SMOTETomek
 from sklearn.metrics import f1_score
 from sklearn import preprocessing, model_selection, metrics, linear_model
-from sklearn.feature_selection import SelectKBest, chi2
+from sklearn.feature_selection import SelectKBest, chi2, f_classif
 from sklearn.naive_bayes import BernoulliNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import LinearSVC
-from imblearn.over_sampling import BorderlineSMOTE, ADASYN
+from imblearn.over_sampling import BorderlineSMOTE, ADASYN, SMOTE
 from xgboost import XGBClassifier
 import lightgbm as lgb
 from catboost import CatBoostClassifier
@@ -20,16 +22,24 @@ def data_processing():
     target = pd.read_csv("dataset/train.csv", delimiter=',', usecols=[0])
 
     # smote technique
-    sm = BorderlineSMOTE(random_state=42, kind="borderline-1")
+    sm = BorderlineSMOTE(random_state=42, kind="borderline-2")
     ada = ADASYN(random_state=42)
+    smt = SMOTETomek(random_state=42)
     X_balanced, Y_balanced = sm.fit_resample(data, target.values.ravel())
+
+    # Tomek Links数据清洗
+    tl = TomekLinks()
+    X_balanced, Y_balanced = tl.fit_resample(X_balanced, Y_balanced)
+
+    # plot the balanced dataset
+    # count_class = pd.value_counts(Y_balanced, sort=True).sort_index()
 
     # dataset is highly categorical so need to perform one-hot encoding
     obj = preprocessing.OneHotEncoder()
     obj.fit(X_balanced)
     X_dummyEncode = obj.transform(X_balanced)
 
-    selectBest_attribute = SelectKBest(chi2, k=700)
+    selectBest_attribute = SelectKBest(chi2, k=1000)
     # fit and transforms the data
     selectBest_attribute.fit(X_dummyEncode, Y_balanced)
     modifiedData = selectBest_attribute.transform(X_dummyEncode)
