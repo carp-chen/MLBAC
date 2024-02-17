@@ -6,6 +6,7 @@ import pandas as pd
 import torch
 import torch.optim as optim
 from imblearn.over_sampling import BorderlineSMOTE, ADASYN
+from imblearn.under_sampling import TomekLinks
 from sklearn import preprocessing
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.model_selection import train_test_split
@@ -24,6 +25,10 @@ def data_parser():
     sm = BorderlineSMOTE(random_state=42, kind="borderline-1")
     ada = ADASYN(random_state=42)
     X_balanced, Y_balanced = sm.fit_resample(data, target.values.ravel())
+
+     # Tomek Links数据清洗
+    tl = TomekLinks()
+    X_balanced, Y_balanced = tl.fit_resample(X_balanced, Y_balanced)
 
     # dataset is highly categorical so need to perform one-hot encoding
     obj = preprocessing.OneHotEncoder()
@@ -109,6 +114,7 @@ def main(args):
 
         if val_acc > best_acc:
             best_acc = val_acc
+            print("best_acc: ", best_acc)
             torch.save(model.state_dict(), "./weights/best_model.pth")
 
         torch.save(model.state_dict(), "./weights/latest_model.pth")
@@ -117,8 +123,8 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--num_classes', type=int, default=2)
-    parser.add_argument('--epochs', type=int, default=10)
-    parser.add_argument('--batch-size', type=int, default=16)
+    parser.add_argument('--epochs', type=int, default=30)
+    parser.add_argument('--batch-size', type=int, default=128)
     parser.add_argument('--lr', type=float, default=0.0002)
 
     # 数据集所在根目录
