@@ -18,11 +18,11 @@ from catboost import CatBoostClassifier
 from sklearn.model_selection import GridSearchCV
 
 def data_processing():
-    data = pd.read_csv("dataset/train.csv", delimiter=',', usecols=range(1, 9))
+    data = pd.read_csv("dataset/train.csv", delimiter=',', usecols=range(1, 10))
     target = pd.read_csv("dataset/train.csv", delimiter=',', usecols=[0])
 
     # smote technique
-    sm = BorderlineSMOTE(random_state=42, kind="borderline-2")
+    sm = BorderlineSMOTE(random_state=42, kind="borderline-1")
     ada = ADASYN(random_state=42)
     smt = SMOTETomek(random_state=42)
     X_balanced, Y_balanced = sm.fit_resample(data, target.values.ravel())
@@ -39,7 +39,7 @@ def data_processing():
     obj.fit(X_balanced)
     X_dummyEncode = obj.transform(X_balanced)
 
-    selectBest_attribute = SelectKBest(chi2, k=1000)
+    selectBest_attribute = SelectKBest(chi2, k=4096)
     # fit and transforms the data
     selectBest_attribute.fit(X_dummyEncode, Y_balanced)
     modifiedData = selectBest_attribute.transform(X_dummyEncode)

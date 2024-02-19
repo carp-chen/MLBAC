@@ -18,7 +18,7 @@ from utils import read_split_data, train_one_epoch, evaluate
 
 
 def data_parser():
-    data = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=range(1, 9))
+    data = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=range(1, 10))
     target = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=[0])
 
     # smote technique
@@ -41,7 +41,7 @@ def data_parser():
     modifiedData = selectBest_attribute.transform(X_dummyEncode)
 
     # split the data into train and test
-    x_train, x_test, y_train, y_test = train_test_split(modifiedData, Y_balanced, test_size=0.2, random_state=100)
+    x_train, x_test, y_train, y_test = train_test_split(modifiedData, Y_balanced, test_size=0.2, random_state=42)
     # 变成numpy array
     x_train = x_train.A
     x_test = x_test.A
@@ -123,9 +123,9 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--num_classes', type=int, default=2)
-    parser.add_argument('--epochs', type=int, default=30)
+    parser.add_argument('--epochs', type=int, default=200)
     parser.add_argument('--batch-size', type=int, default=128)
-    parser.add_argument('--lr', type=float, default=0.0002)
+    parser.add_argument('--lr', type=float, default=0.0001)
 
     # 数据集所在根目录
     # https://storage.googleapis.com/download.tensorflow.org/example_images/flower_photos.tgz
