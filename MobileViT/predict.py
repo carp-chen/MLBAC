@@ -24,7 +24,7 @@ from tqdm import tqdm
 
 
 def data_parser():
-    data = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=range(1, 9))
+    data = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=range(1, 10))
     target = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=[0])
 
     # smote technique

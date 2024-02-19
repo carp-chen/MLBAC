@@ -23,7 +23,6 @@ def data_parser():
 
     # smote technique
     sm = BorderlineSMOTE(random_state=42, kind="borderline-1")
-    ada = ADASYN(random_state=42)
     X_balanced, Y_balanced = sm.fit_resample(data, target.values.ravel())
 
      # Tomek Links数据清洗
