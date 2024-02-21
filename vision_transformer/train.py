@@ -7,6 +7,7 @@ import torch
 import torch.optim as optim
 import torch.optim.lr_scheduler as lr_scheduler
 from imblearn.over_sampling import BorderlineSMOTE, ADASYN
+from imblearn.under_sampling import TomekLinks
 from sklearn import preprocessing
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.model_selection import train_test_split
@@ -17,7 +18,7 @@ from vit_model import vit_base_patch16_224_in21k as create_model
 from utils import read_split_data, train_one_epoch, evaluate
 
 def data_parser():
-    data = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=range(1, 9))
+    data = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=range(1, 10))
     target = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=[0])
 
     # smote technique
@@ -25,12 +26,16 @@ def data_parser():
     ada = ADASYN(random_state=42)
     X_balanced, Y_balanced = sm.fit_resample(data, target.values.ravel())
 
+   # Tomek Links数据清洗
+    tl = TomekLinks()
+    X_balanced, Y_balanced = tl.fit_resample(X_balanced, Y_balanced)
+
     # dataset is highly categorical so need to perform one-hot encoding
     obj = preprocessing.OneHotEncoder()
     obj.fit(X_balanced)
     X_dummyEncode = obj.transform(X_balanced)
 
-    selectBest_attribute = SelectKBest(chi2, k=50176)
+    selectBest_attribute = SelectKBest(chi2, k=16384)
     # fit and transforms the data
     selectBest_attribute.fit(X_dummyEncode, Y_balanced)
     modifiedData = selectBest_attribute.transform(X_dummyEncode)
@@ -41,8 +46,8 @@ def data_parser():
     x_train = x_train.A
     x_test = x_test.A
     # reshape the array
-    x_train = x_train.reshape((x_train.shape[0], 224, 224))
-    x_test = x_test.reshape((x_test.shape[0], 224, 224))
+    x_train = x_train.reshape((x_train.shape[0], 128, 128))
+    x_test = x_test.reshape((x_test.shape[0], 128, 128))
 
     return x_train, x_test, y_train, y_test
 
@@ -150,7 +155,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--num_classes', type=int, default=2)
     parser.add_argument('--epochs', type=int, default=10)
-    parser.add_argument('--batch-size', type=int, default=16)
+    parser.add_argument('--batch-size', type=int, default=64)
     parser.add_argument('--lr', type=float, default=0.001)
     parser.add_argument('--lrf', type=float, default=0.01)
 

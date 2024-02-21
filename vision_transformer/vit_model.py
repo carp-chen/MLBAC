@@ -311,7 +311,7 @@ def vit_base_patch16_224_in21k(num_classes: int = 21843, has_logits: bool = True
     weights ported from official Google JAX impl:
     https://github.com/rwightman/pytorch-image-models/releases/download/v0.1-vitjx/jx_vit_base_patch16_224_in21k-e5005f0a.pth
     """
-    model = VisionTransformer(img_size=224,
+    model = VisionTransformer(img_size=128,
                               patch_size=16,
                               embed_dim=768,
                               depth=12,

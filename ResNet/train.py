@@ -6,12 +6,13 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from imblearn.over_sampling import BorderlineSMOTE
+from imblearn.under_sampling import TomekLinks
 from sklearn import preprocessing
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
-from MLBAC.ResNet.model import resnet50
+from model import resnet50
 from torch.utils.data import DataLoader, Dataset
 import torchvision
 
@@ -56,12 +57,16 @@ def get_loader(batch_size, x_train, x_test, y_train, y_test):
     return train_loader, test_loader
 
 def data_parser():
-    data = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=range(1, 9))
+    data = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=range(1, 10))
     target = pd.read_csv("../dataset/train.csv", delimiter=',', usecols=[0])
 
     # smote technique
     sm = BorderlineSMOTE(random_state=42, kind="borderline-1")
     X_balanced, Y_balanced = sm.fit_resample(data, target.values.ravel())
+
+    # Tomek Links数据清洗
+    tl = TomekLinks()
+    X_balanced, Y_balanced = tl.fit_resample(X_balanced, Y_balanced)
 
     # dataset is highly categorical so need to perform one-hot encoding
     obj = preprocessing.OneHotEncoder()
@@ -114,7 +119,7 @@ def main():
     #     json_file.write(json_str)
 
     x_train, x_test, y_train, y_test = data_parser()
-    batch_size = 16
+    batch_size = 128
     train_loader, test_loader = get_loader(batch_size, x_train, x_test, y_train, y_test)
     train_num = len(x_train)
     # nw = min([os.cpu_count(), batch_size if batch_size > 1 else 0, 8])  # number of workers
@@ -157,7 +162,7 @@ def main():
 
     epochs = 10
     best_acc = 0.0
-    save_path = './resNet34.pth'
+    save_path = './resNet50.pth'
     train_steps = len(train_loader)
     for epoch in range(epochs):
         # train

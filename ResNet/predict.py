@@ -2,11 +2,11 @@ import os
 import json
 import sys
 import torch
-from PIL import Image
+
 from torchvision import transforms
 import matplotlib.pyplot as plt
 
-from model import mobile_vit_small as create_model
+from model import resnet50 as create_model
 
 from imblearn.over_sampling import BorderlineSMOTE, ADASYN
 from imblearn.under_sampling import TomekLinks
@@ -110,7 +110,7 @@ def main():
     # create model
     model = create_model(num_classes=2).to(device)
     # load model weights
-    model_weight_path = "./weights/best_model.pth"
+    model_weight_path = "./resNet50.pth"
     model.load_state_dict(torch.load(model_weight_path, map_location=device))
     model.eval()
 

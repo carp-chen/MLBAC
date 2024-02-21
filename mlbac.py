@@ -112,6 +112,8 @@ def Naive_Bayes(modifiedData, target):
     roc_auc_value = []
     fscre = 0
     mean_accuracy = 0
+    mean_precision = 0
+    mean_recall = 0
 
     #performs 10 fold cross validation
     for fold in range(kFold):
@@ -127,10 +129,14 @@ def Naive_Bayes(modifiedData, target):
         fpr_score, tpr_score, roc_auc_value, mean_auc = roc_value(Y_test, prediction, fpr_score, tpr_socre, mean_auc, roc_auc_value)
         fscre  += f1Score(Y_test, tempPrediction)
         mean_accuracy += metrics.accuracy_score(Y_test, tempPrediction)
+        mean_precision += metrics.precision_score(Y_test, tempPrediction)
+        mean_recall += metrics.recall_score(Y_test, tempPrediction)
 
     print("Mean AUC for Naive Bayes: %f" % (mean_auc / kFold))
     print("F1 - Score Naive Bayes: %f" % (fscre / kFold) )
     print("Mean Accuracy Naive Bayes: %f" % (mean_accuracy / kFold) )
+    print("Mean Precision Naive Bayes: %f" % (mean_precision / kFold) )
+    print("Mean Recall Naive Bayes: %f" % (mean_recall / kFold) )
 
     #plots AUC graph for Naive Bayes
     max_roc = roc_auc_value.index(max(roc_auc_value))
@@ -159,6 +165,8 @@ def Logistic_Regression(data, target):
     roc_auc_value = []
     fscre = 0
     mean_accuracy = 0
+    mean_precision = 0
+    mean_recall = 0
 
     # performs 10 fold cross validation
     for fold in range(kFold):
@@ -174,9 +182,14 @@ def Logistic_Regression(data, target):
         fpr_score, tpr_score, roc_auc_value, mean_auc = roc_value(Y_test, prediction, fpr_score, tpr_socre, mean_auc, roc_auc_value)
         fscre  += f1Score(Y_test, tempPrediction)
         mean_accuracy += metrics.accuracy_score(Y_test, tempPrediction)
+        mean_precision += metrics.precision_score(Y_test, tempPrediction)
+        mean_recall += metrics.recall_score(Y_test, tempPrediction)
+
     print("Mean AUC for Logistic Regression: %f" % (mean_auc / kFold))
     print("F1 - Score Logistic Regression: %f" % (fscre / kFold) )
     print("Mean Accuracy Logistic Regression: %f" % (mean_accuracy / kFold) )
+    print("Mean Precision Logistic Regression: %f" % (mean_precision / kFold) )
+    print("Mean Recall Logistic Regression: %f" % (mean_recall / kFold) )
 
 
     # plots AUC graph for Logistic Regression
@@ -194,7 +207,7 @@ def Random_Forest(data, target):
     """
 
     # creates object for random forest classifier
-    random_forest = RandomForestClassifier(n_jobs=100)
+    random_forest = RandomForestClassifier(n_jobs=10)
 
     # variable initialization
     random_seed = 31  # random seed value
@@ -207,6 +220,8 @@ def Random_Forest(data, target):
     roc_auc_value = []
     fscre = 0
     mean_accuracy = 0
+    mean_precision = 0
+    mean_recall = 0
 
     # performs 10 fold cross validation
     for fold in range(kFold):
@@ -225,10 +240,14 @@ def Random_Forest(data, target):
         fscre += f1Score(Y_test, tempPrediction)
 
         mean_accuracy += metrics.accuracy_score(Y_test, tempPrediction)
+        mean_precision += metrics.precision_score(Y_test, tempPrediction)
+        mean_recall += metrics.recall_score(Y_test, tempPrediction)
 
     print("Mean AUC for Random Forest: %f" % (mean_auc / kFold))
     print("F1 - Score Random Forest: %f" % (fscre / kFold))
     print("Mean Accuracy Random Forest: %f" % (mean_accuracy / kFold))
+    print("Mean Precision Random Forest: %f" % (mean_precision / kFold) )
+    print("Mean Recall Random Forest: %f" % (mean_recall / kFold) )
 
     # plots AUC graph for Random Forest
     max_roc = roc_auc_value.index(max(roc_auc_value))
@@ -258,6 +277,8 @@ def SVM(data, target):
     roc_auc_value = []
     fscre = 0
     mean_accuracy = 0
+    mean_precision = 0
+    mean_recall = 0
 
     # performs 10 fold cross validation
     for fold in range(kFold):
@@ -275,10 +296,14 @@ def SVM(data, target):
         fscre += f1Score(Y_test, prediction)
 
         mean_accuracy += metrics.accuracy_score(Y_test, prediction)
+        mean_precision += metrics.precision_score(Y_test, prediction)
+        mean_recall += metrics.recall_score(Y_test, prediction)
 
     print("Mean AUC for SVM: %f" % (mean_auc / kFold))
     print("F1 - Score SVM: %f" % (fscre / kFold))
     print("Mean Accuracy SVM: %f" % (mean_accuracy / kFold))
+    print("Mean Precision SVM: %f" % (mean_precision / kFold))
+    print("Mean Recall SVM: %f" % (mean_recall / kFold))
 
     # plots AUC graph for SVM
     max_roc = roc_auc_value.index("{0:.2f}".format(mean_auc / kFold))
@@ -308,6 +333,8 @@ def KNN(data, target):
     roc_auc_value = []
     fscre = 0
     mean_accuracy = 0
+    mean_precision = 0
+    mean_recall = 0
 
     # performs 10 fold cross validation
     for fold in range(kFold):
@@ -326,10 +353,15 @@ def KNN(data, target):
         fscre += f1Score(Y_test, tempPrediction)
 
         mean_accuracy += metrics.accuracy_score(Y_test, tempPrediction)
+        mean_precision += metrics.precision_score(Y_test, tempPrediction)
+        mean_recall += metrics.recall_score(Y_test, tempPrediction)
 
     print("Mean AUC for KNN: %f" % (mean_auc / kFold))
     print("F1 - Score KNN: %f" % (fscre / kFold))
     print("Mean Accuracy KNN: %f" % (mean_accuracy / kFold))
+    print("Mean Precision KNN: %f" % (mean_precision / kFold))
+    print("Mean Recall KNN: %f" % (mean_recall / kFold))
+
     # plots AUC graph for KNN
     max_roc = roc_auc_value.index(max(roc_auc_value))
     plt.plot(fpr_score[max_roc], tpr_socre[max_roc], color='b', label='KNN')
@@ -370,6 +402,8 @@ def XGBoost(data, target):
     roc_auc_value = []
     fscre = 0
     mean_accuracy = 0
+    mean_precision = 0
+    mean_recall = 0
 
     # performs 10 fold cross validation
     for fold in range(kFold):
@@ -388,10 +422,15 @@ def XGBoost(data, target):
         fscre += f1Score(Y_test, tempPrediction)
 
         mean_accuracy += metrics.accuracy_score(Y_test, tempPrediction)
+        mean_precision += metrics.precision_score(Y_test, tempPrediction)
+        mean_recall += metrics.recall_score(Y_test, tempPrediction)
 
     print("Mean AUC for XGBoost: %f" % (mean_auc / kFold))
     print("F1 - Score XGBoost: %f" % (fscre / kFold))
     print("Mean Accuracy XGBoost: %f" % (mean_accuracy / kFold))
+    print("Mean Precision XGBoost: %f" % (mean_precision / kFold))
+    print("Mean Recall XGBoost: %f" % (mean_recall / kFold))
+
     # plots AUC graph for XGBoost
     max_roc = roc_auc_value.index(max(roc_auc_value))
     plt.plot(fpr_score[max_roc], tpr_socre[max_roc], color='pink', label='XGBoost')
@@ -438,6 +477,8 @@ def lightGBM(data, target):
     roc_auc_value = []
     fscre = 0
     mean_accuracy = 0
+    mean_precision = 0
+    mean_recall = 0
 
     # performs 10 fold cross validation
     for fold in range(kFold):
@@ -456,10 +497,15 @@ def lightGBM(data, target):
         fscre += f1Score(Y_test, tempPrediction)
 
         mean_accuracy += metrics.accuracy_score(Y_test, tempPrediction)
+        mean_precision += metrics.precision_score(Y_test, tempPrediction)
+        mean_recall += metrics.recall_score(Y_test, tempPrediction)
 
     print("Mean AUC for lightGBM: %f" % (mean_auc / kFold))
     print("F1 - Score lightGBM: %f" % (fscre / kFold))
     print("Mean Accuracy lightGBM: %f" % (mean_accuracy / kFold))
+    print("Mean Precision lightGBM: %f" % (mean_precision / kFold))
+    print("Mean Recall lightGBM: %f" % (mean_recall / kFold))
+
     # plots AUC graph for lightGBM
     max_roc = roc_auc_value.index(max(roc_auc_value))
     plt.plot(fpr_score[max_roc], tpr_socre[max_roc], color='orange', label='lightGBM')
@@ -497,6 +543,9 @@ def CatBoost(data, target):
     roc_auc_value = []
     fscre = 0
     mean_accuracy = 0
+    mean_precision = 0
+    mean_recall = 0
+
     # performs 10 fold cross validation
     for fold in range(kFold):
         # uses train test split of ratio 80:20 to perform 10 fold cross validation
@@ -514,10 +563,15 @@ def CatBoost(data, target):
         fscre += f1Score(Y_test, tempPrediction)
 
         mean_accuracy += metrics.accuracy_score(Y_test, tempPrediction)
+        mean_precision += metrics.precision_score(Y_test, tempPrediction)
+        mean_recall += metrics.recall_score(Y_test, tempPrediction)
 
     print("Mean AUC for CatBoost: %f" % (mean_auc / kFold))
     print("F1 - Score CatBoost: %f" % (fscre / kFold))
     print("Mean Accuracy CatBoost: %f" % (mean_accuracy / kFold))
+    print("Mean Precision CatBoost: %f" % (mean_precision / kFold))
+    print("Mean Recall CatBoost: %f" % (mean_recall / kFold))
+    
     # plots AUC graph for CatBoost
     max_roc = roc_auc_value.index(max(roc_auc_value))
     plt.plot(fpr_score[max_roc], tpr_socre[max_roc], color='purple', label='CatBoost')
@@ -526,10 +580,10 @@ def CatBoost(data, target):
 if __name__ == '__main__':
     modifiedData, Y_balanced = data_processing()
 
-    # start_time = time.time()
-    # Naive_Bayes(modifiedData, Y_balanced)
-    # print("Time Required for Naive Bayes in sec:",  (time.time() - start_time))
-    # print("------------------------------------------------------------------------------")
+    start_time = time.time()
+    Naive_Bayes(modifiedData, Y_balanced)
+    print("Time Required for Naive Bayes in sec:",  (time.time() - start_time))
+    print("------------------------------------------------------------------------------")
 
     # start_time = time.time()
     # Logistic_Regression(modifiedData,Y_balanced)
@@ -541,25 +595,25 @@ if __name__ == '__main__':
     print("Time Required for Random Forest in sec: " ,  (time.time() - start_time))
     print("------------------------------------------------------------------------------")
 
-    # start_time = time.time()
-    # KNN(modifiedData, Y_balanced)
-    # print("Time Required for KNN in sec: ", (time.time() - start_time))
-    # print("------------------------------------------------------------------------------")
+    start_time = time.time()
+    KNN(modifiedData, Y_balanced)
+    print("Time Required for KNN in sec: ", (time.time() - start_time))
+    print("------------------------------------------------------------------------------")
 
-    # start_time = time.time()
-    # SVM(modifiedData, Y_balanced)
-    # print("Time Required for SVM in sec: " ,(time.time() - start_time))
-    # print("------------------------------------------------------------------------------")
+    start_time = time.time()
+    SVM(modifiedData, Y_balanced)
+    print("Time Required for SVM in sec: " ,(time.time() - start_time))
+    print("------------------------------------------------------------------------------")
 
-    # start_time = time.time()
-    # XGBoost(modifiedData, Y_balanced)
-    # print("Time Required for XGBoost in sec: ", (time.time() - start_time))
-    # print("------------------------------------------------------------------------------")
+    start_time = time.time()
+    XGBoost(modifiedData, Y_balanced)
+    print("Time Required for XGBoost in sec: ", (time.time() - start_time))
+    print("------------------------------------------------------------------------------")
 
-    # start_time = time.time()
-    # lightGBM(modifiedData, Y_balanced)
-    # print("Time Required for lightGBM in sec: ", (time.time() - start_time))
-    # print("------------------------------------------------------------------------------")
+    start_time = time.time()
+    lightGBM(modifiedData, Y_balanced)
+    print("Time Required for lightGBM in sec: ", (time.time() - start_time))
+    print("------------------------------------------------------------------------------")
 
     # start_time = time.time()
     # CatBoost(modifiedData, Y_balanced)
